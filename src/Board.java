@@ -10,7 +10,7 @@ public class Board {
     protected int answer1 = 0;
     protected int answer2;
     protected int answer3;
-    protected List<String> availableEdges = new ArrayList<String>();  // availableEdges include all Edges could be used to capture one hexagon by one move
+    protected List<String> availableEdges = new ArrayList<String>();  // includes all Edges could be used to capture one hexagon by one move
     protected void stateCheck() {
         // Note: one layer means a layer of hexagons, for example if the dimension is the 2, there would be 3 layers and
         // the number of hexagons in each layer would be 2, 3, 2
@@ -23,8 +23,8 @@ public class Board {
             }
         }
 
-        int lspx = 0;   // x coordinate of the first hexagon in each layer
-        int lspy = 0;   // y coordinate of the first hexagon in each layer
+        int lspx = 0;   // x coordinate of the left top edge of the first hexagon in each layer
+        int lspy = 0;   // y coordinate of the left top edge of the first hexagon in each layer
         int hspx = 0;   // x coordinate of the top left edge of current hexagon
         int hspy = 0;   // y coordinate of the top left edge of current hexagon
         int plusNum;    // plusNum used to judge if the current hexagon could be captured by one move
@@ -98,7 +98,7 @@ public class Board {
             }
         }
 
-        // From the N layer to the 2N - 1 layer, the number of the hexagons in each layer would be 2N - 2, 2N -3 ... N
+        // From the N + 1 layer to the 2N - 1 layer, the number of the hexagons in each layer would be 2N - 2, 2N -3 ... N
         for (int i = 0; i < (2 * dimension - 2 - dimension + 1); i++) {
             // Calculate x coordinate of the top left edge of the first hexagon of each layer
             hspx = lspx + (i + 1) * 2;

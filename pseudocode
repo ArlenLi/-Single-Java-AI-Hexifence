@@ -3,8 +3,8 @@
 	 * 		dimension	//dimension of the board (2 or 3)
 	 * 		configuration	//2-dimensional array - the configuration of the board
 	 * 		answer1 = 0		//Number of available edges
-	 * 		answer2		//Number of hexagons that can be captured with one move
-	 * 		answer3		//Max number of hexagons that can be captured with one move
+	 * 		answer2	= 0	//Number of hexagons that can be captured with one move
+	 * 		answer3	= 0	//Max number of hexagons that can be captured with one move
 	 * 		availableEdges	//lists all edges that are available on the board
 	 * 
 	 * 		METHOD stateCheck()
@@ -21,8 +21,8 @@
 	 * 
 	 * 			END FOR
 	 * 	
-	 * 			LSPX = 0	//x coordinate of first hexagon in current layer 
-	 * 			LSPY = 0 	//y coordinate of first hexagon in current layer
+	 * 			LSPX = 0	//x coordinate of the top left edge of first hexagon in current layer 
+	 * 			LSPY = 0 	//y coordinate of the top left edge of first hexagon in current layer
 	 * 			HSPX = 0 	//x coordinate of top left edge of current hexagon
 	 * 			HSPY = 0 	//y coordinate of top left edge of current hexagon
 	 * 			PLUSNUM = 0 	//judge if current hexagon can be captured with one move
@@ -39,7 +39,7 @@
 	 * 				
 	 * 					GO THROUGH EACH EDGE OF THE CURRENT HEXAGON [ [HSPX][HSPY]->[HSPX][HSPY+1]->[HSPX+1][HSPY]->[HSPX+1][HSPY+2]->[HSPX+2][HSPY+1]->[HSPX+2][HSPY+2] ]
 	 * 
-	 * 					IF any of the current hexagon's edges are available
+	 * 					IF any of the current hexagon's edge is available
 	 * 
 	 * 						IF PLUSNUM == 0
 	 * 							Add current edge to availableEdges
@@ -61,7 +61,6 @@
 	 * 	
 	 * 			END FOR
 	 * 
-	 * 			FOR each layer in the bottom half of the board (layer N+1 - 2N-1)
 	 *			FOR (int i = 0; i < (2 * dimension - 2 - dimension + 1); i++)
 	 * 
 	 * 				Calculate HSPX by LSPX + (i + 1) * 2
@@ -141,6 +140,7 @@
 	 * 			END ESLE IF
 	 * 			
 	 * 			ELSE
+	 *				PRINT ERROE
 	 * 				EXIT program
 	 * 			END ELSE
 	 * 
@@ -162,6 +162,7 @@
 	 * 			END WHILE
 	 * 
 	 * 			IF input is not the size of the board configuration
+	 *				PRINT ERROE
 	 * 				EXIT program
 	 *			END IF
 	 * 				
@@ -169,21 +170,12 @@
 	 * 				
 	 * 				FOR (int j = 0; j < board.configuration[1].length; j++)
 	 * 
-	 * 					Fill the edge with the corresponding edge in the input configuration
+	 * 					Fill the board configuration with the corresponding edge in the input
 	 * 
 	 * 				END FOR
 	 * 
 	 * 			END FOR
 	 * 
-	 *			FOR (int i = 0; i < board.configuration.length; i++)
-	 * 				
-	 * 				FOR (int j = 0; j < board.configuration[1].length; j++)
-	 * 
-	 * 					PRINT the edge of the board configuration
-	 * 
-	 * 				END FOR
-	 * 
-	 * 			END FOR
 	 * 
 	 * 			CALL METHOD stateCheck()
 	 * 
@@ -191,12 +183,13 @@
 	 * 			PRINT answer2
 	 * 			PRINT answer3
 	 * 
-	 * 		END TRY
+	 * 			END TRY
 	 * 
-	 * 		CATCH exception
-	 * 
-	 *			EXIT program
+	 * 			CATCH exception
+	 *				PRINT ERROE
+	 *				EXIT program
 	 *		
-	 *		END CATCH
+	 *			END CATCH
 	 *
-	 *	END MAIN METHOD
+	 *		END MAIN METHOD
+	 *	END CLASS
