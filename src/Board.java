@@ -202,18 +202,34 @@ public class Board {
                 board.dimension = 3;
                 board.configuration = new char[(4 * board.dimension) - 1][(4 * board.dimension) - 1];
             }else {
-                System.out.println("The dimension number is not 2 or 3");
+                System.out.println("error");
                 System.exit(0);
             }
             d = System.in.read();
+            d = System.in.read();
             // Input will contain all useful characters from input including +, -, R, B
             List<Character> input = new ArrayList<Character>();
+            int count = 0;
             while(d != -1){
-                if (d == (int)'+' || d == (int)'R' || d == (int)'B'|| d == (int)'-') {
-                    input.add((char) d);
-                    d = System.in.read();
+                if (d == (int)'+' || d == (int)'R' || d == (int)'B'|| d == (int)'-' || d == (int)' '|| d == (int)'\n'|| d == (int)'\r') {
+                    if (d == (int) '+' || d == (int) 'R' || d == (int) 'B' || d == (int) '-') {
+                        input.add((char) d);
+                        count++;
+                        d = System.in.read();
+                    } else {
+                        d = System.in.read();
+                    }
+                    if (d == (int) '\n') {
+                        if (count == (4 * board.dimension) - 1) {
+                            count = 0;
+                        } else {
+                            System.out.println("error");
+                            System.exit(0);
+                        }
+                    }
                 } else {
-                    d = System.in.read();
+                    System.out.println("error");
+                    System.exit(0);
                 }
             }
 
@@ -228,13 +244,6 @@ public class Board {
                 for(int j = 0; j < board.configuration[1].length; j++) {
                     board.configuration[i][j] = input.get((i * board.configuration[1].length) + j);
                 }
-            }
-            // output the board
-            for (int i = 0; i < board.configuration.length; i++) {
-                for(int j = 0; j < board.configuration[1].length; j++) {
-                    System.out.print(board.configuration[i][j]);
-                }
-                System.out.println();
             }
 
             board.stateCheck();
