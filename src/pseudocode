@@ -174,16 +174,6 @@
 	 * 
 	 * 			END FOR
 	 * 
-	 * 			FOR each layer of the board
-	 * 				
-	 * 				FOR each edge in the current layer
-	 * 
-	 * 					PRINT the edge of the board configuration
-	 * 
-	 * 				END FOR
-	 * 
-	 * 			END FOR
-	 * 
 	 * 			CALL METHOD stateCheck()
 	 * 
 	 * 			PRINT answer1

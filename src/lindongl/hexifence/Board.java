@@ -1,3 +1,6 @@
+// Gabriel Snider 809203 gsnider
+// Lindong Li 655251 lindongl
+package lindongl.hexifence;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +38,7 @@ public class Board {
             // Set the first hexagon as the current hexagon of this layer
             hspx = lspx;
             for (int j = 0; j < i; j++) {
-                //  Calculate the y coordinate of the top left edge of current hexagon
+                // Calculate the y coordinate of the top left edge of current hexagon
                 // hspx would not change and is always equal to the lspx
                 hspy = lspy + j * 2;
                 plusNum = 0;
@@ -195,7 +198,7 @@ public class Board {
         Board board = new Board();
         try{
             int d = System.in.read();
-            // Judge if the dimension is 2 or 3, if not, the program will exist
+            // Judge if the dimension is 2 or 3, if not, the program will exit
             if ((d == (int)'2')) {
                 board.dimension = 2;
                 board.configuration = new char[(4 * board.dimension) - 1][(4 * board.dimension) - 1];
@@ -213,6 +216,7 @@ public class Board {
             List<Character> input = new ArrayList<Character>();
             int count = 0;
             while(d != -1){
+                // if the input has illegal character, it will output error and exit
                 if (d == (int)'+' || d == (int)'R' || d == (int)'B'|| d == (int)'-' || d == (int)' '|| d == (int)'\n'|| d == (int)'\r') {
                     if (d == (int) '+' || d == (int) 'R' || d == (int) 'B' || d == (int) '-') {
                         input.add((char) d);
@@ -221,6 +225,7 @@ public class Board {
                     } else {
                         d = System.in.read();
                     }
+                    // if the number of edges in each row is not correct, it will output error and exit
                     if (d == (int) '\n') {
                         if (count == (4 * board.dimension) - 1) {
                             count = 0;
@@ -235,7 +240,7 @@ public class Board {
                 }
             }
 
-            // If the size of the input is not correct, the program will exist
+            // If the size of the input is not correct, the program will exit
             if (input.size() != ((4 * board.dimension) - 1) * ((4 * board.dimension) - 1)) {
                 System.out.println("error");
                 System.exit(0);

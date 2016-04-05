@@ -1,0 +1,204 @@
+// Gabriel Snider 809203 gsnider
+// Lindong Li 655251 lindongl
+pseudocode:
+     * Class Board
+	 * 
+	 * 		dimension	//dimension of the board (2 or 3)
+	 * 		configuration	//2-dimensional array - the configuration of the board
+	 * 		answer1 = 0		//Number of available edges
+	 * 		answer2	= 0	//Number of hexagons that can be captured with one move
+	 * 		answer3	= 0	//Max number of hexagons that can be captured with one move
+	 * 		availableEdges	//lists all edges that are available on the board
+	 * 
+	 * 		METHOD stateCheck()
+	 * 		
+	 * 			FOR (int i = 0; i < (4*dimension)-1; i++)
+	 * 
+	 * 				FOR (int j = 0; j < (4*dimension)-1; j++)
+	 * 
+	 * 					IF the edge is available
+	 * 						answer1++
+	 * 					END IF
+	 * 
+	 * 				END FOR
+	 * 
+	 * 			END FOR
+	 * 	
+	 * 			LSPX = 0	//x coordinate of the top left edge of first hexagon in current layer 
+	 * 			LSPY = 0 	//y coordinate of the top left edge of first hexagon in current layer
+	 * 			HSPX = 0 	//x coordinate of top left edge of current hexagon
+	 * 			HSPY = 0 	//y coordinate of top left edge of current hexagon
+	 * 			PLUSNUM = 0 	//judge if current hexagon can be captured with one move
+	 * 
+	 *			FOR (int i = dimension; i <= (2 * dimension) - 1; i++)
+	 * 			
+	 * 				Calculate LSPX by 0 + (i - dimension) * 2
+	 * 				HSPX <-- LSPX
+	 * 	
+	 *				FOR (int j = 0; j < i; j++)
+	 * 				
+	 * 					Calculate HSPY by LSPY + j * 2
+	 * 					PLUSNUM <-- 0
+	 * 				
+	 * 					GO THROUGH EACH EDGE OF THE CURRENT HEXAGON [ [HSPX][HSPY]->[HSPX][HSPY+1]->[HSPX+1][HSPY]->[HSPX+1][HSPY+2]->[HSPX+2][HSPY+1]->[HSPX+2][HSPY+2] ]
+	 * 
+	 * 					IF any of the current hexagon's edge is available
+	 * 
+	 * 						IF PLUSNUM == 0
+	 * 							Add current edge to availableEdges
+	 * 							PLUSNUM++
+	 * 						END IF
+	 * 
+	 * 						ELSE
+	 * 							Remove last edge that was added to availableEdges
+	 * 							CONTINUE with next hexagon in current layer
+	 * 						END ELSE
+	 * 
+	 * 					END IF
+	 * 				
+	 * 					IF PLUSNUM == 1
+	 * 						answer3++
+	 * 					END IF
+	 * 
+	 * 	  			END FOR
+	 * 	
+	 * 			END FOR
+	 * 
+	 *			FOR (int i = 0; i < (2 * dimension - 2 - dimension + 1); i++)
+	 * 
+	 * 				Calculate HSPX by LSPX + (i + 1) * 2
+	 * 				Calculate LSPY by 0 + (i + 1) * 2
+	 * 
+	 *				FOR (int j = 0; j < (2 * dimension - 2- i); j++)
+	 * 
+	 * 					Calculate HSPY by LSPY + j * 2
+	 * 					PLUSNUM <-- 0
+	 * 
+	 * 					GO THROUGH EACH EDGE OF THE CURRENT HEXAGON [ [HSPX][HSPY]->[HSPX][HSPY+1]->[HSPX+1][HSPY]->[HSPX+1][HSPY+2]->[HSPX+2][HSPY+1]->[HSPX+2][HSPY+2] ]
+	 * 
+	 * 					IF any of the current hexagon's edges are available
+	 * 						IF PLUSNUM == 0
+	 * 							Add current edge to availableEdges
+	 * 							PLUSNUM++
+	 * 						END IF
+	 * 						ELSE
+	 * 							Remove last edge that was added to availableEdges
+	 * 							CONTINUE with next hexagon in current layer
+	 * 						END ELSE
+	 * 					END IF
+	 * 				
+	 * 					IF PLUSNUM == 1
+	 * 						answer3++
+	 * 					END IF
+	 * 	
+	 * 				END FOR
+	 * 
+	 * 			END FOR
+	 * 
+	 * 			IF answer3 == 0
+	 * 				answer2 <-- 0
+	 * 			END IF
+	 * 			ELSE
+	 * 				MAXTWO <-- FALSE	//judges if it is possible to capture 2 hexagons with 1 move
+	 * 			
+	 *				FOR (int i = 0; i < availableEdges.size(); i++)
+	 * 
+	 * 					s <-- i edge in availableEdges
+	 * 					Remove s from availableEdges
+	 * 					
+	 * 					IF availableEdges contains s
+	 * 						MAXTWO <-- TRUE
+	 * 						BREAK
+	 * 					END IF
+	 * 
+	 * 				END FOR
+	 * 			
+	 * 				IF MAXTWO == TRUE
+	 * 					answer2 <-- 2
+	 * 				END IF
+	 * 
+	 * 				ELSE
+	 * 					answer2 <-- 1
+	 * 				END ELSE
+	 * 
+	 * 			END ELSE
+	 * 			
+	 * 		END METHOD stateCheck()
+	 * 						
+	 * 		MAIN METHOD
+	 * 
+	 * 		Create new Board board
+	 * 		
+	 * 		TRY
+	 * 			d <-- read board dimension input (2 or 3)
+	 * 			
+	 * 			IF d == 2
+	 * 				dimension <-- 2
+	 * 				Make board configuration
+	 * 			END IF
+	 * 			
+	 * 			ELSE IF d == 3
+	 * 				dimension <-- 3
+	 * 				Make board configuration
+	 * 			END ESLE IF
+	 * 			
+	 * 			ELSE
+	 *				PRINT ERROE
+	 * 				EXIT program
+	 * 			END ELSE
+	 * 
+	 * 			d <-- read board configuration
+	 * 			
+	 * 			INITIALIZE input	//List of characters [+, -, R, B]
+	 * 
+	 * 			WHILE d != -1
+	 * 				
+	 * 				IF d == + or - or R or B
+	 * 					Add d to input
+	 * 					Read next
+	 * 				END IF
+	 * 
+	 * 				ELSE
+	 * 					Read next
+	 * 				END ELSE
+	 * 
+	 * 			END WHILE
+	 * 
+	 * 			IF input is not the size of the board configuration
+	 *				PRINT ERROE
+	 * 				EXIT program
+	 *			END IF
+	 * 				
+	 * 			FOR (int i = 0; i < board.configuration.length; i++)
+	 * 				
+	 * 				FOR (int j = 0; j < board.configuration[1].length; j++)
+	 * 
+	 * 					Fill the board configuration with the corresponding edge in the input
+	 * 
+	 * 				END FOR
+	 * 
+	 * 			END FOR
+	 * 
+	 * 
+	 * 			CALL METHOD stateCheck()
+	 * 
+	 * 			PRINT answer1
+	 * 			PRINT answer2
+	 * 			PRINT answer3
+	 * 
+	 * 			END TRY
+	 * 
+	 * 			CATCH exception
+	 *				PRINT ERROE
+	 *				EXIT program
+	 *		
+	 *			END CATCH
+	 *
+	 *		END MAIN METHOD
+	 *	END CLASS
+Time complexity: 
+N — the dimension of the board
+For calculating the Number of possible moves, the time complexity would be O((4N - 1)square), that is O(Nsquare).
+For calculating the Number of hexagonal cells available for capture by a single move, since we separate the board into two parts. one is from the first layer to the middle layer and the time complexity for this part is O((3N - 1)N/2). The second part is the left layers and the time complexity for this part is O((3N - 2)(N - 1)/2). In summary, that is O(Nsquare).
+For calculating Maximum number of hexagonal cells that can be captured by one move (0, 1, 2), our algorithm goes through all hexagons and records all coordinates of edges which could be used to capture one hexagon. The time complexity of this algorithm is related to the size of the list which stores all coordinates of edges which could be used to capture one hexagon. The worst time complexity is O((3N - 1)N/2+(3N - 2)(N - 1)/2), which is O(Nsquare).
+In summary, the time complexity of the whole algorithm would be O(Nsquare). 
