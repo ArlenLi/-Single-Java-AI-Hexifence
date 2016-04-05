@@ -180,6 +180,8 @@ public class Board {
                 if (availableEdges.contains(s)) {
                     maxTwo = true;
                     break;
+                } else {
+                    availableEdges.add(i,s);
                 }
             }
             if (maxTwo == true) {
