@@ -110,6 +110,9 @@ pseudocode:
 	 * 						MAXTWO <-- TRUE
 	 * 						BREAK
 	 * 					END IF
+	 *					ELSE
+	 *						add removed edge to availableEdges
+	 *					END ELSE
 	 * 
 	 * 				END FOR
 	 * 			
@@ -147,21 +150,36 @@ pseudocode:
 	 * 				EXIT program
 	 * 			END ELSE
 	 * 
-	 * 			d <-- read board configuration
+	 * 			d <-- read one character from input
 	 * 			
 	 * 			INITIALIZE input	//List of characters [+, -, R, B]
-	 * 
+	 * 			count = 0;		// used to detect if the correct number of characters in one line
 	 * 			WHILE d != -1
+	 *				IF d == + or - or R or B or ' ' or '/r' or 'n'
 	 * 				
-	 * 				IF d == + or - or R or B
-	 * 					Add d to input
-	 * 					Read next
-	 * 				END IF
+	 * 					IF d == + or - or R or B
+	 * 						Add d to input
+	 *						count++
+	 * 						Read next
+	 * 					END IF
 	 * 
-	 * 				ELSE
-	 * 					Read next
-	 * 				END ELSE
-	 * 
+	 * 					ELSE
+	 * 						Read next
+	 * 					END ELSE
+	 *				IF d == '/n'
+	 *					IF count == 4 * dimension -1
+	 *						count =0	
+	 *					END IF
+	 *					ELSE
+	 *						PRINT ERROE
+	 * 						EXIT program	
+	 *					END ELSE
+	 *				END IF
+	 *				ELSE
+	 *					PRINT ERROE
+	 * 					EXIT program
+	 *				END ELSE
+
 	 * 			END WHILE
 	 * 
 	 * 			IF input is not the size of the board configuration
@@ -196,6 +214,9 @@ pseudocode:
 	 *
 	 *		END MAIN METHOD
 	 *	END CLASS
+CODE STRUCTURE:
+There is only one class Board.java in my code. There is one method called stateCheck() of this class which is used to answer three questions. I did not use any external jar files.
+
 Time complexity: 
 N — the dimension of the board
 For calculating the Number of possible moves, the time complexity would be O((4N - 1)square), that is O(Nsquare).
