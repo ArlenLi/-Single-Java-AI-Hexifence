@@ -253,6 +253,8 @@ public class Board {
                 }
             }
 
+
+
             board.stateCheck();
             System.out.println(board.answer1);
             System.out.println(board.answer2);
