@@ -106,7 +106,7 @@ public class Referee implements Piece{
                                 boardEmptyPieces--;
 			}	
 		}
-			
+		System.out.println(boardEmptyPieces +" " + P1.getWinner() +" " +  P2.getWinner());
 		}
 		
 		
