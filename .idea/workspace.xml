@@ -57,8 +57,8 @@
       <file leaf-file-name="Lindongl.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/PartB/Referee-1-0/src/lindongl/Lindongl.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.5917667">
-              <caret line="30" column="33" selection-start-line="30" selection-start-column="33" selection-end-line="30" selection-end-column="33" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
               <folding>
                 <element signature="e#8372#8386#0" expanded="true" />
                 <element signature="e#9758#9759#0" expanded="true" />
@@ -181,7 +181,7 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-1551" />
+    <option name="x" value="-1439" />
     <option name="y" value="23" />
     <option name="width" value="1522" />
     <option name="height" value="999" />
@@ -476,7 +476,7 @@
       </extension>
       <option name="MAIN_CLASS_NAME" value="aiproj.hexifence.Referee" />
       <option name="VM_PARAMETERS" value="" />
-      <option name="PROGRAM_PARAMETERS" value="3 lindongl.Lindongl lindongl.Lindongl" />
+      <option name="PROGRAM_PARAMETERS" value="2 lindongl.Lindongl lindongl.Lindongl" />
       <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
@@ -947,16 +947,16 @@
       <workItem from="1459774539380" duration="518000" />
       <workItem from="1459825165272" duration="6020000" />
       <workItem from="1459930777071" duration="83000" />
-      <workItem from="1463109994306" duration="46933000" />
+      <workItem from="1463109994306" duration="47695000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="90081000" />
+    <option name="totallyTimeSpent" value="90843000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1551" y="23" width="1522" height="999" extended-state="0" />
-    <editor active="true" />
+    <frame x="-1439" y="23" width="1522" height="999" extended-state="0" />
+    <editor active="false" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -1343,8 +1343,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/PartB/Referee-1-0/src/lindongl/Lindongl.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5917667">
-          <caret line="30" column="33" selection-start-line="30" selection-start-column="33" selection-end-line="30" selection-end-column="33" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
           <folding>
             <element signature="e#8372#8386#0" expanded="true" />
             <element signature="e#9758#9759#0" expanded="true" />
