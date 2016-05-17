@@ -1,33 +1,37 @@
 package lindongl;
 
 import java.util.*;
+import lindongl.Edge;
+import lindongl.Hexagon;
 
 public class Board{
     public int dimension;    // the dimension of the board
     public char[][] configuration;   // the configuration of the board
-    public static int availableHexagonNum;
-    public static int hexagonsCapturedByRed;
-    public static int hexagonsCapturedByBlue;
-    public static List<Hexagon> hexagonsWithFiveCapturedEdges;
+    public int availableHexagonNum;
+    public int hexagonsCapturedByRed;
+    public int hexagonsCapturedByBlue;
+    public List<Hexagon> hexagonsWithFiveCapturedEdges;
     public Map<String, Hexagon> hexagonsMap;
     public Map<String, Edge> edgesMap;
     public Map<String, Edge> emptyEdges;
+    public Map<String, Integer> variousHexagonsNum = new HashMap<String, Integer>();
 
 
     public Board(int dimension) {
+        this.dimension = dimension;
         hexagonsMap = new HashMap<String, Hexagon>();
         edgesMap = new HashMap<String, Edge>();
         emptyEdges = new HashMap<String, Edge>();
         configuration = new char[4 * dimension - 1][4 * dimension - 1];
         hexagonsWithFiveCapturedEdges = new ArrayList<Hexagon>();
-        Hexagon.variousHexagonsNum.put("0", 0);
-        Hexagon.variousHexagonsNum.put("1", 0);
-        Hexagon.variousHexagonsNum.put("2", 0);
-        Hexagon.variousHexagonsNum.put("3", 0);
-        Hexagon.variousHexagonsNum.put("4", 0);
-        Hexagon.variousHexagonsNum.put("5", 0);
-        Hexagon.variousHexagonsNum.put("61", 0);
-        Hexagon.variousHexagonsNum.put("62", 0);
+        variousHexagonsNum.put("0", 0);
+        variousHexagonsNum.put("1", 0);
+        variousHexagonsNum.put("2", 0);
+        variousHexagonsNum.put("3", 0);
+        variousHexagonsNum.put("4", 0);
+        variousHexagonsNum.put("5", 0);
+        variousHexagonsNum.put("61", 0);
+        variousHexagonsNum.put("62", 0);
         int centerX;
         int centerY;
         for (int i = 0; i < 2 * dimension - 1; i++) {
