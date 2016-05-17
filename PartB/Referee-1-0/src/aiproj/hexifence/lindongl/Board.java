@@ -1,8 +1,6 @@
-package lindongl;
+package aiproj.hexifence.lindongl;
 
 import java.util.*;
-import lindongl.Edge;
-import lindongl.Hexagon;
 
 public class Board{
     public int dimension;    // the dimension of the board

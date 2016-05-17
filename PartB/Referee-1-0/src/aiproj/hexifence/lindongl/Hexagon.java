@@ -1,12 +1,9 @@
-package lindongl;
+package aiproj.hexifence.lindongl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import lindongl.Edge;
-import lindongl.Board;
 
 public class Hexagon {
     public int capturedEdgeNum;

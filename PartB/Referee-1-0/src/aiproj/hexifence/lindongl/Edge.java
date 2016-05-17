@@ -1,9 +1,7 @@
-package lindongl;
+package aiproj.hexifence.lindongl;
 
 import java.util.ArrayList;
 import java.util.List;
-import lindongl.Hexagon;
-import lindongl.Board;
 
 public class Edge{
     public List<Hexagon> relativeHexagons;
