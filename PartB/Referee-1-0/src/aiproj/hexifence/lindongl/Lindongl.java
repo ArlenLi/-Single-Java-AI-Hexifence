@@ -1,8 +1,9 @@
 package aiproj.hexifence.lindongl;
 
-import aiproj.hexifence.Move;
-import aiproj.hexifence.Piece;
-import aiproj.hexifence.Player;
+
+import java.io.*;
+import java.util.*;
+
 
 import java.io.*;
 import java.util.*;
@@ -15,27 +16,25 @@ public class Lindongl implements Player, Piece {
     public int moveNum;
     public int firstStage;
     public int secondStage;
-    public int finalStage;
-    public Map<String, Integer> historyTableofTwo = new HashMap<String, Integer>();
-    public Map<String, Integer> historyTableofThree = new HashMap<String, Integer>();
+    public Map<String, Double> historyTableofTwo = new HashMap<String, Double>();
+    public Map<String, Double> historyTableofThree = new HashMap<String, Double>();
+    //public double[] weights = new double[]{0.0, 1.0, 2.0, 3.0, 4.0, -5.0, 6.0};
+
     public double[] weights;
-    public List<GameStatus> gamedata = new ArrayList<GameStatus>();
-    public Map<Double, int[]> leafNodes = new HashMap<Double, int[]>();
-    public double lamda = 0.7;
-    public double delta = 1.0;
+
+    public List<GameStatus> gamedata;
+
 
     public int init(int n, int p){
         if(n == 2 || n == 3) {
             if(p == 1 || p == 2) {
-                weights = new double[7];
+                weights = new double[8];
                 if (n == 2) {
-                    firstStage = 5;
+                    firstStage = 3;
                     secondStage = 10;
-                    finalStage = 15;
                 } else {
-                    firstStage = 12;
-                    secondStage = 30;
-                    finalStage =6;
+                    firstStage = 4;
+                    secondStage = 36;
                 }
                 piece = p;
                 board = new Board(n);
@@ -45,64 +44,48 @@ public class Lindongl implements Player, Piece {
                 } else {
                     opponentPiece = 1;
                 }
-                try {
-                if (n == 2) {
-                    File file = new File("historyTableofTwo.txt");
-                    if (file.exists()) {
-                        FileReader fr = new FileReader(file);
-                        BufferedReader br = new BufferedReader(fr);
-                        String line = "";
-                        String[] result = null;
-                        while ((line = br.readLine()) != null) {
-                            result = line.split(" ");
-                            historyTableofTwo.put(result[0], Integer.valueOf(result[1]));
+//                try {
+                    if (n == 2) {
+                        for(Map.Entry<String, Edge> entry: board.edgesMap.entrySet()) {
+                            historyTableofTwo.put(entry.getKey(), 0.0);
                         }
                     }else {
                         for(Map.Entry<String, Edge> entry: board.edgesMap.entrySet()) {
-                            historyTableofTwo.put(entry.getKey(), 0);
+                            historyTableofThree.put(entry.getKey(), 0.0);
                         }
                     }
-                    }else {
-                    File file = new File("historyTableofThree.txt");
-                    if (file.exists()) {
-                        FileReader fr = new FileReader(file);
-                        BufferedReader br = new BufferedReader(fr);
-                        String line = "";
-                        String[] result = null;
-                        while ((line = br.readLine()) != null) {
-                            result = line.split(" ");
-                            historyTableofThree.put(result[0], Integer.valueOf(result[1]));
-                        }
-                    }else {
-                        for(Map.Entry<String, Edge> entry: board.edgesMap.entrySet()) {
-                            historyTableofThree.put(entry.getKey(), 0);
-                        }
-                    }
-                }
-                    if(piece == 1) {
-                        File file = new File("weightsForBlue.txt");
-                        FileReader fr = new FileReader(file);
-                        BufferedReader br = new BufferedReader(fr);
-                        String line = br.readLine();
-                        String[] results = line.split(" ");
-                        for (int i = 0; i < results.length; i++) {
-                            weights[i] = Double.parseDouble(results[i]);
-                        }
-                    } else {
-                        File file = new File("weightsForRed.txt");
-                        FileReader fr = new FileReader(file);
-                        BufferedReader br = new BufferedReader(fr);
-                        String line = br.readLine();
-                        String[] results = line.split(" ");
-                        for (int i = 0; i < results.length; i++) {
-                            weights[i] = Double.parseDouble(results[i]);
-                        }
-                    }
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+//                    if (piece == 1) {
+//                        File file = new File("weightsForBlue.txt");
+//                        if(!file.exists()){
+//                            pln("There is no weighte files.");
+//                            System.exit(1);
+//                        }
+//                        FileReader fr = new FileReader(file);
+//                        BufferedReader br = new BufferedReader(fr);
+//                        String line = br.readLine();
+//                        String[] results = line.split(" ");
+//                        for (int i = 0; i < results.length; i++) {
+//                            weights[i] = Double.parseDouble(results[i]);
+//                        }
+//                    } else {
+//                        File file = new File("weightsForRed.txt");
+//                        if(!file.exists()){
+//                            pln("There is no weighte files.");
+//                            System.exit(1);
+//                        }
+//                        FileReader fr = new FileReader(file);
+//                        BufferedReader br = new BufferedReader(fr);
+//                        String line = br.readLine();
+//                        String[] results = line.split(" ");
+//                        for (int i = 0; i < results.length; i++) {
+//                            weights[i] = Double.parseDouble(results[i]);
+//                        }
+//                    }
+//                } catch (FileNotFoundException e) {
+//                    e.printStackTrace();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
                 return 1;
             } else {
                 return -1;
@@ -181,32 +164,17 @@ public class Lindongl implements Player, Piece {
                 }
                 move.Row = edge.row;
                 move.Col = edge.col;
-//                return move;
             }
         } else if (moveNum <= secondStage && moveNum > firstStage) {
-            double[] result = minimaxWithHistoryHeuristics(4, piece, Integer.MIN_VALUE, Integer.MAX_VALUE);
+            double[] result = minimaxWithHistoryHeuristics(3, piece, Integer.MIN_VALUE, Integer.MAX_VALUE);
             move.Row = (int)result[1];
             move.Col = (int)result[2];
-//            pln(result[0]);
-//            for (int i = 0; i < leafNodes.get(result[0]).length; i++) {
-//                pln(leafNodes.get(result[0])[i]);
-//            }
-//            pln("*******************");
-            gamedata.add(new GameStatus(result[0],leafNodes.get(result[0])));
-//            for (int i = 0; i < result.length; i++) {
-//                pln(result[i]);
-//            }
-//            pln("**********************");
-//            return move;
         } else{
-            double[] result = minimaxWithHistoryHeuristics(4, piece, Integer.MIN_VALUE, Integer.MAX_VALUE);
+            double[] result = minimaxWithHistoryHeuristics(Integer.MAX_VALUE, piece, Integer.MIN_VALUE, Integer.MAX_VALUE);
             move.Row = (int)result[1];
             move.Col = (int)result[2];
-            gamedata.add(new GameStatus(result[0],leafNodes.get(result[0])));
-//            return move;
         }
         board.captureOneEdge(String.valueOf(move.Row) + String.valueOf(move.Col), piece);
-        leafNodes = new HashMap<Double, int[]>();
         return move;
     }
 
@@ -233,39 +201,6 @@ public class Lindongl implements Player, Piece {
             return -1;
         } else {
             if(board.emptyEdges.size() == 0) {
-                try {
-                    if(board.dimension == 2) {
-                        File file = new File("historyTableofTwo.txt");
-                        if (!file.exists()) {
-                            file.createNewFile();
-                        } else {
-                            BufferedWriter out = new BufferedWriter(new FileWriter(file));
-                            for (Map.Entry<String, Integer> entry: historyTableofTwo.entrySet()) {
-                                out.write(entry.getKey() + " " + entry.getValue());
-                                out.newLine();
-                            }
-                            out.flush();
-                            out.close();
-                        }
-                    } else {
-                        File file = new File("historyTableofThree.txt");
-                        if (!file.exists()) {
-                            file.createNewFile();
-                        } else {
-                            BufferedWriter out = new BufferedWriter(new FileWriter(file));
-                            for (Map.Entry<String, Integer> entry: historyTableofThree.entrySet()) {
-                                out.write(entry.getKey() + " " + entry.getValue());
-                                out.newLine();
-                            }
-                            out.flush();
-                            out.close();
-                        }
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                updateWeights();
-
                 if(board.hexagonsCapturedByBlue > board.hexagonsCapturedByRed) {
                     return 1;
                 } else if (board.hexagonsCapturedByBlue < board.hexagonsCapturedByRed) {
@@ -344,13 +279,10 @@ public class Lindongl implements Player, Piece {
     //alpha-beta prunning algorithm
     public double[] minimaxWithHistoryHeuristics(int depth, int player, double alpha, double beta) {
         Map<String, Edge> currentAvailableEdges = getCurrentAvailableEdges();
-        Map<String, Integer> sortedMap = new HashMap<String, Integer>();
-        List<Map.Entry<String, Integer>> list = new ArrayList<Map.Entry<String, Integer>>();
-        //int[] bestActionFeatures = new int[8];
+        Map<String, Double> sortedMap = new HashMap<String, Double>();
+        List<Map.Entry<String, Double>> list = new ArrayList<Map.Entry<String, Double>>();
         if(board.dimension == 2) {
-            int count = 0;
             for (Map.Entry<String, Edge> entry : currentAvailableEdges.entrySet()) {
-                count++;
                 sortedMap.put(entry.getKey(), historyTableofTwo.get(entry.getKey()));
             }
 //            pln(count);
@@ -368,30 +300,15 @@ public class Lindongl implements Player, Piece {
             Collections.sort(list, vc);
         }
         double score;
-        int bestRow = -1;
-        int bestCol = -1;
+        double bestRow = -1;
+        double bestCol = -1;
         // evaluate the score when game is over or depth is reached
         if(board.emptyEdges.size() == 0 || depth == 0) {
             score = evaluate();
-            //pln(score);
-                int[] result = new int[8];
-//                result[0] = score;
-//                result[1] = bestRow;
-//                result[2] = bestCol;
-                result[0] = board.variousHexagonsNum.get("0");
-                result[1] = board.variousHexagonsNum.get("1");
-                result[2] = board.variousHexagonsNum.get("2");
-                result[3] = board.variousHexagonsNum.get("3");
-                result[4] = board.variousHexagonsNum.get("4");
-                result[5] = board.variousHexagonsNum.get("5");
-                result[6] = board.variousHexagonsNum.get("61");
-                result[7] = board.variousHexagonsNum.get("62");
-//                return result;
-            leafNodes.put(score, result);
             return new double[] {score, bestRow, bestCol};
         } else {
             // try this move for the current player
-            for(Map.Entry<String, Integer> mapping : list) {
+            for(Map.Entry<String, Double> mapping : list) {
                 String key = mapping.getKey();
                 Edge edge = currentAvailableEdges.get(key);
                 board.captureOneEdge(key, player);
@@ -424,29 +341,13 @@ public class Lindongl implements Player, Piece {
             }
             if (board.dimension == 2){
                 if(bestRow != -1)
-                historyTableofTwo.put((String.valueOf(bestRow) + String.valueOf(bestCol)), (int) (historyTableofTwo.get((String.valueOf(bestRow) + String.valueOf(bestCol))) + Math.pow(2, depth)));
+                    historyTableofTwo.put((String.valueOf(bestRow) + String.valueOf(bestCol)), (historyTableofTwo.get((String.valueOf((int)bestRow) + String.valueOf((int)bestCol))) + Math.pow(2, depth)));
             }
             if (board.dimension == 3){
-                historyTableofThree.put(String.valueOf(bestRow) + String.valueOf(bestCol), (int) (historyTableofThree.get(String.valueOf(bestRow) + String.valueOf(bestCol)) + Math.pow(2, depth)));
+                if(bestRow != -1)
+                    historyTableofThree.put(String.valueOf(bestRow) + String.valueOf(bestCol), (historyTableofThree.get(String.valueOf((int)bestRow) + String.valueOf((int)bestCol)) + Math.pow(2, depth)));
             }
 
-//                int[] result = new int[11];
-//            if(player == piece) {
-//                result[0] = alpha;
-//            } else {
-//                result[0] = beta;
-//            }
-//                result[1] = bestRow;
-//                result[2] = bestCol;
-//                result[3] = bestActionFeatures[0];
-//                result[4] = bestActionFeatures[1];
-//                result[5] = bestActionFeatures[2];
-//                result[6] = bestActionFeatures[3];
-//                result[7] = bestActionFeatures[4];
-//                result[8] = bestActionFeatures[5];
-//                result[9] = bestActionFeatures[6];
-//                result[10] = bestActionFeatures[7];
-//                return result;
             return new double[] {(player == piece)?alpha : beta, bestRow, bestCol};
         }
     }
@@ -476,88 +377,85 @@ public class Lindongl implements Player, Piece {
                 + score;
     }
 
-    private static class ValueComparator implements Comparator<Map.Entry<String,Integer>>
+    private static class ValueComparator implements Comparator<Map.Entry<String,Double>>
     {
-        public int compare(Map.Entry<String,Integer> m,Map.Entry<String,Integer> n) {
-            return n.getValue()-m.getValue();
+        public int compare(Map.Entry<String,Double> m,Map.Entry<String,Double> n) {
+            double result = n.getValue() - m.getValue();
+            if (result > 0)
+                return 1;
+            else if (result == 0)
+                return 0;
+            else
+                return -1;
         }
     }
 
-    // Using TDLeaf(λ) to update weights
-    public void updateWeights() {
-        double error;
-        double firstSum;
-        double secondSum;
-        for (int i = 0; i < weights.length; i++) {
-            error = 0;
-            firstSum = 0;
-            secondSum = 0;
-            for(int j = 0; j < gamedata.size() - 1; j++) {
-                for(int m = 0; m < gamedata.size() - 1; m++) {
-                    secondSum += (Math.tanh(gamedata.get(m + 1).value) - Math.tanh(gamedata.get(m).value)) * Math.pow(lamda, m - j);
-                }
-                if(i == 6) {
-                    int feature;
-                    if(piece == 1) {
-                        feature = gamedata.get(j).features[6] - gamedata.get(j).features[7];
-                    } else {
-                        feature = gamedata.get(j).features[7] - gamedata.get(j).features[6];
-                    }
-                    firstSum += (1 - Math.pow(Math.tanh(gamedata.get(j).value), 2)) * feature * secondSum;
-                } else {
-                    firstSum += (1 - Math.pow(Math.tanh(gamedata.get(j).value), 2)) * gamedata.get(j).features[i] * secondSum;
-                }
-            }
-            weights[i] = weights[i] +  (delta * firstSum);
-        }
-        for (int i = 0; i < weights.length; i++) {
-            pln("*****************");
-            pln(weights[i]);
-            pln("*****************");
-        }
-        try {
-            if (piece == 1) {
-                File file = new File("weightsForBlue.txt");
-                if (!file.exists()) {
-                    file.createNewFile();
-                } else {
-                    BufferedWriter out = new BufferedWriter(new FileWriter(file));
-                    String line = "";
-                    for (int i = 0; i < weights.length; i++) {
-                        if(i != 0) {
-                            line = line + " " + weights[i];
-                        } else {
-                            line = line + weights[i];
-                        }
-                    }
-                    out.write(line);
-                    out.flush();
-                    out.close();
-                }
-            } else {
-                File file = new File("weightsForRed.txt");
-                if (!file.exists()) {
-                    file.createNewFile();
-                } else {
-                    BufferedWriter out = new BufferedWriter(new FileWriter(file));
-                    String line = "";
-                    for (int i = 0; i < weights.length; i++) {
-                        if(i != 0) {
-                            line = line + " " + weights[i];
-                        } else {
-                            line = line + weights[i];
-                        }
-                    }
-                    out.write(line);
-                    out.flush();
-                    out.close();
-                }
-            }
-        }catch (IOException e) {
-                e.printStackTrace();
-        }
-    }
-
+//    public void updateWeights() {
+//        double firstSum;
+//        double secondSum;
+//        for (int i = 0; i < weights.length; i++) {
+//            firstSum = 0;
+//            for(int j = 0; j < gamedata.size() - 1; j++) {
+//                secondSum = 0;
+//                for(int m = 0; m < gamedata.size() - 1; m++) {
+//                    secondSum = secondSum + (Math.tanh(gamedata.get(m + 1).value) - Math.tanh(gamedata.get(m).value)) * Math.pow(lamda, m - j);
+//                }
+//                if(i == 6) {
+//                    int feature;
+//                    if(piece == 1) {
+//                        feature = gamedata.get(j).features[6] - gamedata.get(j).features[7];
+//                    } else {
+//                        feature = gamedata.get(j).features[7] - gamedata.get(j).features[6];
+//                    }
+//                    firstSum = firstSum + (1 - Math.pow(Math.tanh(gamedata.get(j).value), 2)) * feature * secondSum;
+//                } else {
+//                    firstSum = firstSum + (1 - Math.pow(Math.tanh(gamedata.get(j).value), 2)) * gamedata.get(j).features[i] * secondSum;
+//                }
+//            }
+//            weights[i] = weights[i] +  (delta * firstSum);
+//        }
+//        try {
+//            if (piece == 1) {
+//                File file = new File("weightsForBlue.txt");
+//                if (!file.exists()) {
+//                    file.createNewFile();
+//                } else {
+//                    BufferedWriter out = new BufferedWriter(new FileWriter(file));
+//                    String line = "";
+//                    for (int i = 0; i < weights.length; i++) {
+//                        if(i != 0) {
+//                            line = line + " " + weights[i];
+//                        } else {
+//                            line = line + weights[i];
+//                        }
+//                    }
+//                    out.write(line);
+//                    out.flush();
+//                    out.close();
+//                }
+//            } else {
+//                File file = new File("weightsForRed.txt");
+//                if (!file.exists()) {
+//                    file.createNewFile();
+//                } else {
+//                    BufferedWriter out = new BufferedWriter(new FileWriter(file));
+//                    String line = "";
+//                    for (int i = 0; i < weights.length; i++) {
+//                        if(i != 0) {
+//                            line = line + " " + weights[i];
+//                        } else {
+//                            line = line + weights[i];
+//                        }
+//                    }
+//                    out.write(line);
+//                    out.flush();
+//                    out.close();
+//                }
+//            }
+//        }catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
 
 

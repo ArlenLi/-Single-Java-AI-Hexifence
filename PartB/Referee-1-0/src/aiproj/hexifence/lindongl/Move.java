@@ -1,4 +1,4 @@
-package aiproj.hexifence;
+package aiproj.hexifence.lindongl;
 /*
  *   Move:
  *      Define possible hexifence move

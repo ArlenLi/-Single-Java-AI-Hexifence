@@ -1,0 +1,71 @@
+// Lindong Li 655251 lindongl
+// Gabriel Snider 809203 gsnider
+Alpha-Beta Search is the basic algorithm used in this project. For most part of the game, I used three-depth to meet the limitation of time and memory. At the beginning of the game, I used random algorithm to place edges, but I also add some limitations including the player will definitely capture one hexagon with only one available edge, the player will definitely not place one edge to one hexagon with two available edges. Besides, at the end of the game, I set the search depth to Integer.MAX_VALUE, because at this point, the search options are few and search to the end of the game is a good choice.
+
+I used the history heuristics to improve the efficiency of the algorithm. The pseudocode of Alpha-Beta Search with history heuristics is shown as follows.
+
+I also used the TDLeaf(λ) to improve my evaluation function. My evaluation function is 
+E = W0 * (the number of hexagons with 6 available edges) + W1 * (the number of hexagons with 5 available edges) + W2 * (the number of hexagons with 4 available edges) + W3 * (the number of hexagons with 3 available edges) + W4 * (the number of hexagons with 2 available edges) + W5 * (the number of hexagons with 1 available edges) + W6 * (the number of captured hexagons of current player - the number of captured hexagons of opponent)
+For different players, blue and red, I update their weights separately. There are two documents to store weights information. However, after I trained the evaluation function, the parameters were weired. For the Red one is -4.641114989790555 -0.45528548440468825 2.080533528375785 34.84270879743194 -26.378869513033155 -18.54292925092122 23.696229218836386, and for the blue one is 3.4652977078252474 -21.95751674576503 -2.615085436920366 -90.44557553002198 -9.188248341679648 60.96678094158753 -60.96252608921765. I played against these parameters with my original parameters, they are even worse. So I decided to use original weights[0.0, 1.0, 2.0, 3.0, 4.0, -5.0, 6.0] for each weight.
+
+PseudoCode for Alpha-Beta Search with history heuristics:
+int[] minimax(int depth, int player, int alpha, int beta) {
+    int score;
+    int bestRow = -1;
+    int bestCol = -1;
+    // evaluate the score when game is over or depth is reached
+            if(board.emptyEdges.size() == 0 || depth == 0) {
+            score = evaluate();
+            return new int[] {score, bestRow, bestCol};
+} else {
+    currentAvailableEdges = getCurrentAvailableEdges();  // get all available edges at this point
+    for i = 1 to currentAvailableEdges.size() do 
+        rating[i] = HistoryTable[currentAvailableEdges.size[i]];
+    Sort (currentAvailableEdges, rating)
+    for i = 1 to currentAvailableEdges.size() do {
+        MakeMove(currentAvailableEdges.size[i])
+        if (player = currentPlayer) {
+            score = minimax(depth -1, opponent, alpha, beta)[0];
+            if(score > alpha) {
+                                alpha = score;
+                                bestRow = edge.row;
+                                bestCol = edge.col;
+                        }
+        } else {
+            // opponentPiece is minimizing player
+                            score = minimax(depth - 1, piece, alpha, beta)[0];
+                        if (score < beta) {
+                                beta = score;
+                                bestRow = edge.row;
+                                bestCol = edge.col;
+                            }
+        }
+        undo(currentAvailableEdges.size[i]); // undo the move
+        if (alpha >= beta)
+                        break;
+    }
+    // update history score
+    HistoryTable[bestMove] = HistoryTable[bestMove] + Weight(d); 
+    return new int[] {(player == piece)?alpha : beta, bestRow, bestCol};
+}
+}
+
+
+void updateWeights() {
+    double firstSum;
+    double secondSum;
+    for (int i = 0; i < weights.length; i++) {
+            firstSum = 0;
+            for(int j = 0; j < gamedata.size() - 1; j++) { 
+                secondSum = 0;
+                for(int m = 0; m < gamedata.size() - 1; m++) {
+                    secondSum = secondSum + (Math.tanh(gamedata.get(m + 1).value) - Math.tanh(gamedata.get(m).value)) * Math.pow(lamda, m - j);
+                }
+                firstSum = firstSum + (1 - Math.pow(Math.tanh(gamedata.get(j).value), 2)) * gamedata.get(j).features[i] * secondSum;
+            }
+            weights[i] = weights[i] +  (delta * firstSum);
+        }
+    }
+}
+
+PS: All the code of this project is completed by me(Lindong Li, lindongl, 655251), which could be seen in the bitbuckethttps://bitbucket.org/lindongl/ai-parta. In the PartA, Gabriel Snider wrote the pesudocode and did some tests. We also had some regular meetings to discuss some problems and he attended all meetings. But he did not push any real code to the bitbucket.

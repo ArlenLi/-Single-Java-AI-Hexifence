@@ -1,4 +1,4 @@
-package aiproj.hexifence;
+package aiproj.hexifence.lindongl;
 /*
  *   Piece:
  *      Define types of states that can appear on a board
